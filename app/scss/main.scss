@@ -1,12 +1,15 @@
 @import 'bourbon';
 @import 'utils/reset';
 
+$baseFontFamily: "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+
 *{
 	@include box-sizing(border-box);
 }
 
 html,body{
 	height: 100%;
+	font-family: $baseFontFamily;
 }
 
 .container{
@@ -16,6 +19,9 @@ html,body{
 	height: 100%;
 }
 
+button{
+	font-family: $baseFontFamily;
+}
 
 textarea{
 	width: 100%;
@@ -23,5 +29,10 @@ textarea{
 	flex: 2;
 	margin-bottom: 20px;
 	font-size: 13px;
+	font-family: $baseFontFamily;
+}
+
+h1{
+	font-size: 18px;
 }
 
