@@ -2,6 +2,7 @@
 
 gulp = require 'gulp'
 sass = require 'gulp-sass'
+clean = require 'gulp-clean'
 browserify = require 'browserify'
 browserSync = require 'browser-sync'
 bourbon = require('node-bourbon').includePaths
@@ -55,6 +56,16 @@ gulp.task 'browser-sync', ->
 #Reload all Browsers
 gulp.task 'bs-reload', -> browserSync.reload()
 
+gulp.task 'copy',->
+	gulp.src './app/index.html'
+		.pipe gulp.dest 'dist/'
+	gulp.src './app/build/**/*', base: './app/'
+		.pipe gulp.dest 'dist/'	
+
+gulp.task 'clean',->
+	gulp.src 'dist/', read: false
+		.pipe clean()
+
 #Watch files
 gulp.task 'watch', ['styles','scripts', 'browser-sync'], ->
 	gulp.watch 'app/*.html', ['bs-reload']
@@ -62,7 +73,8 @@ gulp.task 'watch', ['styles','scripts', 'browser-sync'], ->
 	gulp.watch 'app/js/src/**/*.js',['scripts']
 	gulp.watch 'app/js/src/**/*.coffee',['scripts']
 
-gulp.task 'build',['styles','scripts']
+gulp.task 'build',['clean','styles','scripts'], ->
+	gulp.start 'copy'
 
 
 
