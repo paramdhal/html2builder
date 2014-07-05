@@ -1,4 +1,6 @@
 htmlparser = require 'htmlparser2'
+extend = require 'extend-object'
+require 'string.prototype.repeat'
 
 class Html2Builder
 	constructor: () ->
@@ -7,11 +9,19 @@ class Html2Builder
 		@parser = new htmlparser.Parser @handler
 		@output = ''
 		@selfclosing = ["area","base", "br", "col", "embed", "hr" ,"img", "input" ,"keygen", "link","meta" ,"param", "source" ,"wbr"]
+		@defaults = 
+			format: false
+		@options = {}
 
 	setInput: (input)->
 		@input = input
+		@tabs = 0
 		@output = ''
-	getOutput: ->
+	getOutput: (options)->
+
+		extend @options,@defaults,options
+
+		@setWhiteSpace @options.format
 		@parser.write(@input)
 		@parser.done();
 		@parser.reset();
@@ -38,10 +48,15 @@ class Html2Builder
 		attribs = @attribs item.attribs 
 		attribs =  attribs.join('')
 		comma = if @selfclosing.indexOf(item.name) is -1 then ',' else ''
+		tabs = @setTabs @tabs
+		newline = if @options.format then "\n" else ""
 
-		@output += "@w#{name}(#{attribs}#{comma}"
+		@output += "#{tabs}@w#{name}(#{attribs}#{comma}#{newline}"
+		@increaseTab()
 		@children item.children
-		@output += ')'
+		@output += "#{tabs})#{newline}"
+		@decreaseTab()
+		
 
 	attribs: (attr)->
 		for prop, value of attr
@@ -52,7 +67,13 @@ class Html2Builder
 		if children.length then @iterate children
 
 	text: (item)->
+		newline = if @options.format then "\n" else ""
 		text = @cleanText item.data
+		if @options.format and text is ' ' 
+			text = ''
+		else
+			tabs = @setTabs @tabs
+			text = tabs + text + newline
 		@output += text
 
 	comment: (item)->
@@ -66,4 +87,20 @@ class Html2Builder
 	capitalize: (string)->
 		string.charAt(0).toUpperCase() + string.slice(1);
 
+	setWhiteSpace: (bool)->
+		@handler._options.normalizeWhitespace = bool
+
+	setTabs: (n)->
+		'\t'.repeat n
+
+	increaseTab: ->
+		if @options.format then @tabs++
+
+	decreaseTab: ->
+		if @options.format then @tabs--
+
 module.exports = Html2Builder
+
+
+
+

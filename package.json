@@ -3,7 +3,9 @@
   "description": "Conver HTML to Builder macros",
   "version": "0.0.1",
   "dependencies": {
-    "htmlparser2": "^3.7.2"
+    "extend-object": "^1.0.0",
+    "htmlparser2": "^3.7.2",
+    "string.prototype.repeat": "^0.2.0"
   },
   "devDependencies": {
     "browser-sync": "^0.9.1",
