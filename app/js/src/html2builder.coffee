@@ -6,6 +6,7 @@ class Html2Builder
 		@handler = new htmlparser.DomHandler @parse
 		@parser = new htmlparser.Parser @handler
 		@output = ''
+		@selfclosing = ["area","base", "br", "col", "embed", "hr" ,"img", "input" ,"keygen", "link","meta" ,"param", "source" ,"wbr"]
 
 	setInput: (input)->
 		@input = input
@@ -36,40 +37,35 @@ class Html2Builder
 		name = @capitalize item.name
 		attribs = @attribs item.attribs 
 		attribs =  attribs.join('')
-		@output += "@w#{name}(#{attribs},"
+		comma = if @selfclosing.indexOf(item.name) is -1 then ',' else ''
+		
+		console.log @selfclosing.indexOf item.name
+		console.log comma
+		@output += "@w#{name}(#{attribs}#{comma}"
 		@children item.children
 		@output += ')'
 
 	attribs: (attr)->
 		for prop, value of attr
-			"@wa(#{prop},#{value})"
+			val = @cleanText value
+			"@wa(#{prop},#{val})"
 	
 	children: (children)->
 		if children.length then @iterate children
 
 	text: (item)->
-		@output += item.data
+		text = @cleanText item.data
+		@output += text
 
 	comment: (item)->
-		@output += "@wcomment(#{item.data})"
+		comment = @cleanText item.data
+		@output += "@wcomment(#{comment})"
+
+	cleanText: (string)->
+		clean = string.replace "@","{|@|}"
+		clean.replace ",","{,}"
 
 	capitalize: (string)->
 		string.charAt(0).toUpperCase() + string.slice(1);
 
 module.exports = Html2Builder
-
-# var htmlparser = require("htmlparser2");
-# var rawHtml = "<div class='test'></div><div class='test'></div>";
-# var handler = new htmlparser.DomHandler(function (error, dom) {
-#     if (error)
-#         console.log(error);
-#     else
-#         console.log(dom);
-#     	dom.forEach(function(item){
-#     		console.log(item);
-#     	});
-
-# });
-# var parser = new htmlparser.Parser(handler);
-# parser.write(rawHtml);
-# parser.done();
