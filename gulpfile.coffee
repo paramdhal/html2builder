@@ -10,6 +10,7 @@ source = require 'vinyl-source-stream'
 streamify = require 'gulp-streamify'
 gutil = require 'gulp-util'
 uglify = require 'gulp-uglify'
+shell = require 'gulp-shell'
 task = gutil.env._[0]
 
 #Styles
@@ -66,6 +67,12 @@ gulp.task 'clean',->
 	gulp.src 'dist/', read: false
 		.pipe clean()
 
+date =new Date
+
+gulp.task 'git', shell.task ['git add -A',"git ci -m 'Deployment #{date}'",
+"git push origin :gh-pages --force", 
+"git subtree --prefix dist gh-pages"]
+
 #Watch files
 gulp.task 'watch', ['styles','scripts', 'browser-sync'], ->
 	gulp.watch 'app/*.html', ['bs-reload']
@@ -76,5 +83,6 @@ gulp.task 'watch', ['styles','scripts', 'browser-sync'], ->
 gulp.task 'build',['clean','styles','scripts'], ->
 	gulp.start 'copy'
 
-
+gulp.task 'deploy',['build','copy'],->
+	gulp.start 'git'
 
