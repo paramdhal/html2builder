@@ -71,7 +71,7 @@ date =new Date
 
 gulp.task 'git', shell.task ['git add -A',"git ci -m 'Deployment #{date}'",
 "git push origin :gh-pages --force", 
-"git subtree --prefix dist gh-pages"]
+"git subtree push --prefix dist origin gh-pages"]
 
 #Watch files
 gulp.task 'watch', ['styles','scripts', 'browser-sync'], ->
