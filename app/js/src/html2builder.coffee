@@ -1,16 +1,19 @@
 htmlparser = require 'htmlparser2'
 
 class Html2Builder
-	constructor: (@input) ->
+	constructor: () ->
+		@input = ''
 		@handler = new htmlparser.DomHandler @parse
 		@parser = new htmlparser.Parser @handler
 		@output = ''
+
+	setInput: (input)->
+		@input = input
+		@output = ''
 	getOutput: ->
-
 		@parser.write(@input)
-		
 		@parser.done();
-
+		@parser.reset();
 		return @output
 
 	parse: (error, dom)=>
@@ -24,16 +27,20 @@ class Html2Builder
 	iterate: (val)=>
 		switch val.type
 			when "tag" then @tag val
+			when "text" then @text val
 			
 	tag: (item)->
 		name = @capitalize item.name
 		attribs = @attribs item.attribs 
 		attribs =  attribs.join('')
-		@output += "@w#{name}(#{attribs},)\n"
+		@output += "@w#{name}(#{attribs},)"
 
 	attribs: (attr)->
 		for prop, value of attr
 			"@wa(#{prop},#{value})"
+
+	text: (item)->
+		@output += item.data
 
 	capitalize: (string)->
 		string.charAt(0).toUpperCase() + string.slice(1);

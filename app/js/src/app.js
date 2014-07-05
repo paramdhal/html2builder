@@ -4,12 +4,18 @@
 var Html2Builder = require('./html2builder');
 
 
-var input = document.getElementById('input').value;
+var input = document.getElementById('input');
 var output = document.getElementById('output');
+var convert = document.getElementById('convert');
 
-var builder = new Html2Builder(input);
+var builder = new Html2Builder();
+convert.addEventListener('click',convertHTML);
+convertHTML();
 
-output.value = builder.getOutput();
+function convertHTML(){
+	builder.setInput(input.value);
+	output.value = builder.getOutput();
+}
 
 // var htmlparser = require("htmlparser2");
 // var rawHtml = "<div class='test'></div><div class='test'></div>";
