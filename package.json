@@ -1,0 +1,36 @@
+{
+  "name": "html2builder",
+  "description": "Conver HTML to Builder macros",
+  "version": "0.0.1",
+  "dependencies": {
+    "htmlparser2": "^3.7.2"
+  },
+  "devDependencies": {
+    "browser-sync": "^0.9.1",
+    "browserify": "^3.32.1",
+    "browserify-shim": "^3.3.1",
+    "coffee-script": "^1.7.1",
+    "coffeeify": "^0.6.0",
+    "debowerify": "^0.7.0",
+    "gulp": "^3.5.5",
+    "gulp-sass": "^0.7.1",
+    "gulp-streamify": "0.0.5",
+    "gulp-uglify": "^0.2.1",
+    "gulp-util": "^2.2.14",
+    "node-bourbon": "^1.0.0",
+    "vinyl-source-stream": "^0.1.1"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "browserify": {
+    "transform": [
+      "coffeeify",
+      "browserify-shim",
+      "debowerify"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:$"
+  }
+}
