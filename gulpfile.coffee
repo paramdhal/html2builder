@@ -57,13 +57,13 @@ gulp.task 'browser-sync', ->
 #Reload all Browsers
 gulp.task 'bs-reload', -> browserSync.reload()
 
-gulp.task 'copy',->
+gulp.task 'copy',['clean'],->
 	gulp.src './app/index.html'
 		.pipe gulp.dest 'dist/'
 	gulp.src './app/build/**/*', base: './app/'
 		.pipe gulp.dest 'dist/'	
 
-gulp.task 'clean',->
+gulp.task 'clean',['styles','scripts'],->
 	gulp.src 'dist/', read: false
 		.pipe clean()
 
@@ -80,8 +80,7 @@ gulp.task 'watch', ['styles','scripts', 'browser-sync'], ->
 	gulp.watch 'app/js/src/**/*.js',['scripts']
 	gulp.watch 'app/js/src/**/*.coffee',['scripts']
 
-gulp.task 'build',['clean','styles','scripts'], ->
-	gulp.start 'copy'
+gulp.task 'build',['copy']
 
 gulp.task 'deploy',['build','copy'],->
 	gulp.start 'git'
