@@ -1,7 +1,7 @@
 {
   "name": "html2builder",
   "version": "0.0.1",
-  "homepage": "",
+  "homepage": "https://github.com/paramdhal/html2builder",
   "description": "Conver HTML to Builder macros",
   "license": "MIT",
   "private": true,
