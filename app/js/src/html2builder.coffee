@@ -38,9 +38,7 @@ class Html2Builder
 		attribs = @attribs item.attribs 
 		attribs =  attribs.join('')
 		comma = if @selfclosing.indexOf(item.name) is -1 then ',' else ''
-		
-		console.log @selfclosing.indexOf item.name
-		console.log comma
+
 		@output += "@w#{name}(#{attribs}#{comma}"
 		@children item.children
 		@output += ')'
@@ -62,8 +60,8 @@ class Html2Builder
 		@output += "@wcomment(#{comment})"
 
 	cleanText: (string)->
-		clean = string.replace "@","{|@|}"
-		clean.replace ",","{,}"
+		clean = string.replace /@/g,"{|@|}"
+		clean.replace /,/g,"{,}"
 
 	capitalize: (string)->
 		string.charAt(0).toUpperCase() + string.slice(1);
