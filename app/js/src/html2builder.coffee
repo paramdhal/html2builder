@@ -21,10 +21,12 @@ class Html2Builder
 			console.log error
 		else
 			console.log dom
-			dom.forEach @iterate
-			
+			@iterate dom
+	
+	iterate: (dom)->
+		dom.forEach @iterator	
 
-	iterate: (val)=>
+	iterator: (val)=>
 		switch val.type
 			when "tag" then @tag val
 			when "text" then @text val
@@ -33,11 +35,16 @@ class Html2Builder
 		name = @capitalize item.name
 		attribs = @attribs item.attribs 
 		attribs =  attribs.join('')
-		@output += "@w#{name}(#{attribs},)"
+		@output += "@w#{name}(#{attribs},"
+		@children item.children
+		@output += ')'
 
 	attribs: (attr)->
 		for prop, value of attr
 			"@wa(#{prop},#{value})"
+	
+	children: (children)->
+		if children.length then @iterate children
 
 	text: (item)->
 		@output += item.data
