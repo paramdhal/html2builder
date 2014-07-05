@@ -1,6 +1,8 @@
 @import 'bourbon';
 @import 'utils/reset';
 
-body{
-	background-color: #fff;
+textarea{
+	width: 100%;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }

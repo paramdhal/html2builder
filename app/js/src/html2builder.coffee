@@ -30,6 +30,7 @@ class Html2Builder
 		switch val.type
 			when "tag" then @tag val
 			when "text" then @text val
+			when "comment" then @comment val
 			
 	tag: (item)->
 		name = @capitalize item.name
@@ -48,6 +49,9 @@ class Html2Builder
 
 	text: (item)->
 		@output += item.data
+
+	comment: (item)->
+		@output += "@wcomment(#{item.data})"
 
 	capitalize: (string)->
 		string.charAt(0).toUpperCase() + string.slice(1);
