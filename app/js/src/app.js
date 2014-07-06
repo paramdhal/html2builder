@@ -1,7 +1,7 @@
 'use strict';
 
 // var $ = require('jquery');
-var Html2Builder = require('./html2builder');
+var H2BConvert= require('./h2bconvert');
 
 
 var input = document.getElementById('input');
@@ -9,7 +9,7 @@ var output = document.getElementById('output');
 var convert = document.getElementById('convert');
 var format = document.getElementById('format');
 
-var builder = new Html2Builder();
+var builder = new H2BConvert();
 convert.addEventListener('click',convertHTML);
 format.addEventListener('click',formatHTML);
 formatHTML();

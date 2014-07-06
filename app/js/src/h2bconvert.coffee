@@ -2,7 +2,7 @@ htmlparser = require 'htmlparser2'
 extend = require 'extend-object'
 require 'string.prototype.repeat'
 
-class Html2Builder
+class H2BConvert
 	constructor: () ->
 		@input = ''
 		@handler = new htmlparser.DomHandler @parse
@@ -31,7 +31,7 @@ class Html2Builder
 		if error
 			console.log error
 		else
-			console.log dom
+			#console.log dom
 			@iterate dom
 	
 	iterate: (dom)->
@@ -99,7 +99,7 @@ class Html2Builder
 	decreaseTab: ->
 		if @options.format then @tabs--
 
-module.exports = Html2Builder
+module.exports = H2BConvert
 
 
 
