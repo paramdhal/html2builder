@@ -1,5 +1,4 @@
 htmlparser = require 'htmlparser2'
-extend = require 'extend-object'
 require 'string.prototype.repeat'
 
 class H2BConvert
@@ -9,19 +8,11 @@ class H2BConvert
 		@parser = new htmlparser.Parser @handler
 		@output = ''
 		@selfclosing = ["area","base", "br", "col", "embed", "hr" ,"img", "input" ,"keygen", "link","meta" ,"param", "source" ,"wbr"]
-		@defaults = 
-			format: false
-		@options = {}
 
 	setInput: (input)->
 		@input = input
-		@tabs = 0
 		@output = ''
-	getOutput: (options)->
-
-		extend @options,@defaults,options
-
-		@setWhiteSpace @options.format
+	getOutput: ()->
 		@parser.write(@input)
 		@parser.done();
 		@parser.reset();
@@ -31,7 +22,7 @@ class H2BConvert
 		if error
 			console.log error
 		else
-			#console.log dom
+			console.log dom
 			@iterate dom
 	
 	iterate: (dom)->
@@ -48,16 +39,11 @@ class H2BConvert
 		attribs = @attribs item.attribs 
 		attribs =  attribs.join('')
 		comma = if @selfclosing.indexOf(item.name) is -1 then ',' else ''
-		tabs = @setTabs @tabs
-		newline = if @options.format then "\n" else ""
-
-		@output += "#{tabs}@w#{name}(#{attribs}#{comma}#{newline}"
-		@increaseTab()
-		@children item.children
-		@output += "#{tabs})#{newline}"
-		@decreaseTab()
 		
-
+		@output += "@w#{name}(#{attribs}#{comma}"
+		@children item.children
+		@output += ")"
+		
 	attribs: (attr)->
 		for prop, value of attr
 			val = @cleanText value
@@ -67,13 +53,7 @@ class H2BConvert
 		if children.length then @iterate children
 
 	text: (item)->
-		newline = if @options.format then "\n" else ""
 		text = @cleanText item.data
-		if @options.format and text is ' ' 
-			text = ''
-		else
-			tabs = @setTabs @tabs
-			text = tabs + text + newline
 		@output += text
 
 	comment: (item)->
@@ -87,18 +67,7 @@ class H2BConvert
 	capitalize: (string)->
 		string.charAt(0).toUpperCase() + string.slice(1);
 
-	setWhiteSpace: (bool)->
-		@handler._options.normalizeWhitespace = bool
-
-	setTabs: (n)->
-		'\t'.repeat n
-
-	increaseTab: ->
-		if @options.format then @tabs++
-
-	decreaseTab: ->
-		if @options.format then @tabs--
-
+	
 module.exports = H2BConvert
 
 
