@@ -1,9 +1,11 @@
 H2BConvert= require('./h2bconvert');
+htmlparser = require 'htmlparser2'
 
 class H2BFormat extends H2BConvert
 	constructor: () ->
 		super
-		@handler._options.normalizeWhitespace = true
+		@handler = new htmlparser.DomHandler @parse, normalizeWhitespace: true
+		@parser = new htmlparser.Parser @handler
 
 	setInput: (input)->
 		super

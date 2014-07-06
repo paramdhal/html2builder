@@ -23,7 +23,5 @@ function convertHTML(){
 
 function formatHTML(){
 	h2bformat.setInput(input.value);
-	output.value = h2bformat.getOutput({
-		format: true
-	});
+	output.value = h2bformat.getOutput();
 }

@@ -4,7 +4,7 @@ require 'string.prototype.repeat'
 class H2BConvert
 	constructor: () ->
 		@input = ''
-		@handler = new htmlparser.DomHandler @parse
+		@handler = new htmlparser.DomHandler @parse 
 		@parser = new htmlparser.Parser @handler
 		@output = ''
 		@selfclosing = ["area","base", "br", "col", "embed", "hr" ,"img", "input" ,"keygen", "link","meta" ,"param", "source" ,"wbr"]
@@ -12,6 +12,7 @@ class H2BConvert
 	setInput: (input)->
 		@input = input
 		@output = ''
+		console.log this
 	getOutput: ()->
 		@parser.write(@input)
 		@parser.done();
