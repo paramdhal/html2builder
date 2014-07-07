@@ -12,7 +12,7 @@ class H2BConvert
 	setInput: (input)->
 		@input = input
 		@output = ''
-		console.log this
+
 	getOutput: ()->
 		@parser.write(@input)
 		@parser.done();
@@ -23,7 +23,7 @@ class H2BConvert
 		if error
 			console.log error
 		else
-			console.log dom
+			#console.log dom
 			@iterate dom
 	
 	iterate: (dom)->

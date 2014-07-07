@@ -17,21 +17,31 @@ class H2BFormat extends H2BConvert
 		attribs =  attribs.join('')
 		comma = if @selfclosing.indexOf(item.name) is -1 then ',' else ''
 		tabs = @setTabs @tabs
+		children  = @checkForTag item.children
 		
+		if children then newline = '\n' else newline = ''
 
-		@output += "#{tabs}@w#{name}(#{attribs}\n"
-		@increaseTab()
+		@increaseTab() if children
+
+		@output += "#{tabs}@w#{name}(#{attribs}#{comma}#{newline}"
+		
 		@children item.children
-		@output += "#{tabs})\n"
-		@decreaseTab()
+
+		if item.next is null then newline = "" else newline = "\n"
+
+		tabs = "" if not children
+			
+		@output += "#{tabs})#{newline}"
+
+		@decreaseTab() if children
 
 	text: (item)->
 		text = @cleanText item.data
 		if text is ' ' 
 			text = ''
 		else
-			tabs = @setTabs @tabs
-			text = tabs + text + "\n"
+			if item.next isnt null then text =  text + '\n' 
+			
 		@output += text
 
 	increaseTab: ->
@@ -42,6 +52,10 @@ class H2BFormat extends H2BConvert
 
 	setTabs: (n)->
 		'\t'.repeat n
+
+	checkForTag: (children)->
+		children.some (el)->
+			el.type is 'tag' or el.type is 'comment'
 
 module.exports = H2BFormat
 	
