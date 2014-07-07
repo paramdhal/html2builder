@@ -37,9 +37,12 @@ class H2BFormat extends H2BConvert
 
 	text: (item)->
 		text = @cleanText item.data
+		tabs = ''
 		if text is ' ' 
 			text = ''
 		else
+			if item.parent and @checkForTag item.parent.children then tabs = @setTabs @tabs
+			text = tabs + text
 			if item.next isnt null then text =  text + '\n' 
 			
 		@output += text
