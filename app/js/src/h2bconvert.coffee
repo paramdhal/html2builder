@@ -17,7 +17,7 @@ class H2BConvert
 		@parser.write(@input)
 		@parser.done();
 		@parser.reset();
-		return @output
+		@output
 
 	parse: (error, dom)=>
 		if error

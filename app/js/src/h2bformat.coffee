@@ -11,6 +11,11 @@ class H2BFormat extends H2BConvert
 		super
 		@tabs = 0
 
+	getOutput: ()->
+		super
+		return @output.trim()
+
+
 	tag: (item)->
 		name = @capitalize item.name
 		attribs = @attribs item.attribs 
@@ -18,21 +23,15 @@ class H2BFormat extends H2BConvert
 		comma = if @selfclosing.indexOf(item.name) is -1 then ',' else ''
 		tabs = @setTabs @tabs
 		children  = @checkForTag item.children
-		
 		if children then newline = '\n' else newline = ''
 
 		@increaseTab() if children
-
 		@output += "#{tabs}@w#{name}(#{attribs}#{comma}#{newline}"
 		
 		@children item.children
 
-		if item.next is null then newline = "" else newline = "\n"
-
-		tabs = "" if not children
-			
-		@output += "#{tabs})#{newline}"
-
+		tabs = "" if not children	
+		@output += "#{tabs})\n"
 		@decreaseTab() if children
 
 	text: (item)->
@@ -46,6 +45,12 @@ class H2BFormat extends H2BConvert
 			if item.next isnt null then text =  text + '\n' 
 			
 		@output += text
+
+	comment: (item)->
+		comment = @cleanText item.data
+		tabs = @setTabs @tabs
+		@output += "#{tabs}@wcomment(#{comment})"
+		@output += "\n"
 
 	increaseTab: ->
 		@tabs++
