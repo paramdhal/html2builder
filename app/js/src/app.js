@@ -14,6 +14,7 @@ var h2bconvert = new H2BConvert();
 var h2bformat= new H2BFormat();
 convert.addEventListener('click',convertHTML);
 format.addEventListener('click',formatHTML);
+input.value = document.documentElement.outerHTML;
 formatHTML();
 
 function convertHTML(){

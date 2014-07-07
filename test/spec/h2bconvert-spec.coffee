@@ -62,5 +62,9 @@ describe 'format', ->
 
 	baseExpectations format
 
+	it 'should return text inside and outside of tags',->
+		format.setInput 'Test<div>Test</div>Test'
+		expect(format.getOutput()).toBe 'Test\n@wDiv(,Test)\nTest'
+
 
 	
