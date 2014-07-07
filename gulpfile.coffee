@@ -89,7 +89,7 @@ gulp.task 'watch', ['styles','scripts', 'browser-sync'], ->
 	gulp.watch 'app/js/src/**/*.coffee',['scripts','tests']
 	gulp.watch 'test/spec/**/*.coffee', ['tests']
 
-gulp.task 'build',['copy','test']
+gulp.task 'build',['copy','tests']
 
 gulp.task 'deploy',['build','copy'],->
 	gulp.start 'git'
