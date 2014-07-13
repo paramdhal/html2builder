@@ -37,7 +37,7 @@ class H2BFormat extends H2BConvert
 		else
 			if item.parent and @checkForTag item.parent.children then tabs = @setTabs @tabs
 			text = tabs + text
-			if item.next isnt null then text =  text + '\n' 
+			if item.next isnt null or item.prev isnt null then text =  text + '\n' 
 			
 		@output += text
 
@@ -63,7 +63,7 @@ class H2BFormat extends H2BConvert
 	cleanText: (string)->
 		clean = string.replace /@/g,"{|@|}"
 		clean = clean.replace /,/g,"{,}"
-		clean = clean.replace /\n|\t/g,""
+		clean = clean.replace /\n|\t|^(\s)+$/g,""
 		clean = clean.replace /^(\s)+$/g, ""
 
 module.exports = H2BFormat

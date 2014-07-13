@@ -76,4 +76,12 @@ describe 'format', ->
 	it 'should remove unnecessary tabs', ->
 		format.setInput 'Test\tTest'
 		expect(format.getOutput()).toBe 'TestTest'
+
+	it 'should format text only inside html element to be one line', ->
+		format.setInput '<div>test</div>'
+		expect(format.getOutput()).toBe '@wDiv(,test)'
 	
+	it 'should format more than text inside html element to be mulitline', ->
+		format.setInput '<div>test<span></span>test</div>'
+		expect(format.getOutput()).toBe '@wDiv(,\n\ttest\n\t@wSpan(,)\n\ttest\n)'
+
