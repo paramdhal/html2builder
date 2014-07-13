@@ -47,6 +47,11 @@ reportError = (error) ->
 	browserSync.notify error
 	gutil.beep()
 
+gulp.task 'images', ->
+	gulp.src 'app/images/*'
+		.pipe gulp.dest 'app/build/images/'
+		.pipe browserSync.reload stream:true
+
 #Browser sync
 gulp.task 'browser-sync', ->
 	browserSync.init null,
@@ -65,7 +70,7 @@ gulp.task 'copy',['clean'],->
 		.pipe gulp.dest 'dist/'	
 
 #Clean dist directory
-gulp.task 'clean',['styles','scripts'],->
+gulp.task 'clean',['styles','scripts','images'],->
 	gulp.src 'dist/', read: false
 		.pipe clean()
 
@@ -82,10 +87,11 @@ gulp.task 'tests', ->
 		.pipe jasmine( verbose: true)
 
 #Watch files
-gulp.task 'watch', ['styles','scripts', 'browser-sync'], ->
+gulp.task 'watch', ['styles','scripts','images','browser-sync'], ->
 	gulp.watch 'app/*.html', ['bs-reload']
 	gulp.watch 'app/scss/**/*.scss', ['styles']
 	gulp.watch 'app/js/src/**/*.js',['scripts']
+	gulp.watch 'app/images/*',['images']
 	gulp.watch 'app/js/src/**/*.coffee',['scripts','tests']
 	gulp.watch 'test/spec/**/*.coffee', ['tests']
 
