@@ -66,5 +66,14 @@ describe 'format', ->
 		format.setInput 'Test<div>Test</div>Test'
 		expect(format.getOutput()).toBe 'Test\n@wDiv(,Test)\nTest'
 
+	it 'should remove unnecessary whitespace', ->
+		format.setInput 'Test<div>Test\n</div>\n\nTest'
+		expect(format.getOutput()).toBe 'Test\n@wDiv(,Test)\nTest'
 
+		format.setInput 'Test <span>text</span> text'
+		expect(format.getOutput()).toBe 'Test \n@wSpan(,text)\n text'
+
+	it 'should remove unnecessary tabs', ->
+		format.setInput 'Test\tTest'
+		expect(format.getOutput()).toBe 'TestTest'
 	

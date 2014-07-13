@@ -2,11 +2,6 @@ H2BConvert= require('./h2bconvert');
 htmlparser = require 'htmlparser2'
 
 class H2BFormat extends H2BConvert
-	constructor: () ->
-		super
-		@handler = new htmlparser.DomHandler @parse, normalizeWhitespace: true
-		@parser = new htmlparser.Parser @handler
-
 	setInput: (input)->
 		super
 		@tabs = 0
@@ -37,7 +32,7 @@ class H2BFormat extends H2BConvert
 	text: (item)->
 		text = @cleanText item.data
 		tabs = ''
-		if text is ' ' 
+		if text is ' ' or text is ''
 			text = ''
 		else
 			if item.parent and @checkForTag item.parent.children then tabs = @setTabs @tabs
@@ -64,6 +59,12 @@ class H2BFormat extends H2BConvert
 	checkForTag: (children)->
 		children.some (el)->
 			el.type is 'tag' or el.type is 'comment'
+
+	cleanText: (string)->
+		clean = string.replace /@/g,"{|@|}"
+		clean = clean.replace /,/g,"{,}"
+		clean = clean.replace /\n|\t/g,""
+		clean = clean.replace /^(\s)+$/g, ""
 
 module.exports = H2BFormat
 	
