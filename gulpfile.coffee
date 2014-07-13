@@ -18,7 +18,7 @@ task = gutil.env._[0]
 gulp.task 'styles', ->
 	gulp.src 'app/scss/**/*.scss'
 		.pipe sass
-			outputStyle: if task is 'build' then 'compressed' else 'expanded'
+			outputStyle: if task is 'build' or task is 'deploy' then 'compressed' else 'expanded'
 			includePaths : [bourbon]
 			onError: reportError
 		.pipe gulp.dest 'app/build/css/'
@@ -38,7 +38,7 @@ gulp.task 'scripts', ->
 
 	 bundleStream
 		.pipe source 'app.js'
-		.pipe if task is 'build' then streamify uglify() else gutil.noop()
+		.pipe if task is 'build' or task is 'deploy' then streamify uglify() else gutil.noop()
 		.pipe gulp.dest 'app/build/js'
 		.pipe browserSync.reload stream:true
 
