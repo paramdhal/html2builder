@@ -32,6 +32,7 @@ class H2BConvert
 	iterator: (val)=>
 		switch val.type
 			when "tag" then @tag val
+			when "script" then @tag val
 			when "text" then @text val
 			when "comment" then @comment val
 			
