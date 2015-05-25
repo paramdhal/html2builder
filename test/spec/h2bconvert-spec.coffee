@@ -85,3 +85,6 @@ describe 'format', ->
 		format.setInput '<div>test<span></span>test</div>'
 		expect(format.getOutput()).toBe '@wDiv(,\n\ttest\n\t@wSpan(,)\n\ttest\n)'
 
+	it 'should deal with self closing tags which are not self closing',->
+		format.setInput '<div><span/><div></div></div>'
+		expect(format.getOutput()).toBe '@wDiv(,\n\t@wSpan(,)\n\t@wDiv(,)\n)'
