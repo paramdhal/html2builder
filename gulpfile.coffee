@@ -1,4 +1,4 @@
-#jslint node: true
+	#jslint node: true
 
 gulp = require 'gulp'
 sass = require 'gulp-sass'
@@ -30,10 +30,10 @@ gulp.task 'scripts', ->
 	b = browserify
 		basedir: './app/js/src/'
 		extensions: '.coffee'
+		debug: true
 	
 	bundleStream = b.add './app.js'
-		.bundle
-			debug: true
+		.bundle()
 		.on 'error',reportError
 
 	 bundleStream
