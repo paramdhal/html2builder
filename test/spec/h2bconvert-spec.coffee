@@ -41,6 +41,9 @@ baseExpectations = (instance)->
 		instance.setInput '<meta content="test" />'
 		expect(instance.getOutput()).toBe '@wMeta(@wa(content,test))'
 
+	it 'should deal with document with xmlns',->
+		instance.setInput '<!DOCTYPE div><div xmlns="http://www.w3.org/1999/xhtml"></div>'
+		expect(instance.getOutput()).toBe '@wDocument(div,,)'
 
 describe 'convert', ->
 

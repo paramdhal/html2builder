@@ -37,11 +37,17 @@ class H2BConvert
 			
 	tag: (item)->
 		name = @capitalize item.name
-		attribs = @attribs item.attribs 
+		extra = ''
+		attribs = item.attribs
+		if attribs.hasOwnProperty("xmlns") and attribs.xmlns is "http://www.w3.org/1999/xhtml"
+			delete attribs.xmlns
+			name = "Document"
+			extra = "#{item.name},"
+		attribs = @attribs attribs 
 		attribs =  attribs.join('')
 		comma = if @selfclosing.indexOf(item.name) is -1 then ',' else ''
 		
-		@output += "@w#{name}(#{attribs}#{comma}"
+		@output += "@w#{name}(#{extra}#{attribs}#{comma}"
 		@children item.children
 		@output += ")"
 		
