@@ -1,40 +1,36 @@
 {
   "name": "html2builder",
   "description": "Conver HTML to Builder macros",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "repository" :{ 
+    "type" : "git",
+    "url" : "https://github.com/paramdhal/html2builder.git"
+  },
+  "license": "UNLICENSED",
   "dependencies": {
     "htmlparser2": "^3.7.2",
     "string.prototype.repeat": "^0.2.0"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.1.18",
+    "babelify": "^7.2.0",
     "browser-sync": "^2.9.3",
-    "browserify": "^11.1.0",
-    "browserify-shim": "^3.8.10",
-    "coffee-script": "^1.10.0",
-    "coffeeify": "^1.1.0",
-    "debowerify": "^1.3.1",
+    "browserify": "^12.0.1",
     "gulp": "^3.9.0",
     "gulp-clean": "^0.3.1",
     "gulp-jasmine": "^2.0.1",
+    "gulp-load-plugins": "^1.1.0",
+    "gulp-notify": "^2.2.0",
     "gulp-sass": "^2.0.4",
-    "gulp-shell": "^0.4.3",
+    "gulp-shell": "^0.5.1",
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^1.4.1",
     "gulp-util": "^3.0.6",
     "node-bourbon": "^4.2.3",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.6.1"
   },
   "engines": {
     "node": ">=0.10.0"
-  },
-  "browserify": {
-    "transform": [
-      "coffeeify",
-      "browserify-shim",
-      "debowerify"
-    ]
-  },
-  "browserify-shim": {
-    "jquery": "global:$"
   }
 }
