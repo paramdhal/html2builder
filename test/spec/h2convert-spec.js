@@ -1,5 +1,5 @@
-var H2BConvert = require('../../app/js/src/h2bconvert');
-var H2BFormat = require('../../app/js/src/h2bformat');
+import H2BConvert from '../../app/js/src/h2bconvert';
+import H2BFormat from '../../app/js/src/h2bformat';
 
 var baseExpectations = function(instance) {
 	it('should take an input', function() {
@@ -48,9 +48,8 @@ var baseExpectations = function(instance) {
 	});
 };
 
-describe('convert', function() {
-	var convert;
-	convert = new H2BConvert();
+describe('convert', function() {;
+	let convert = new H2BConvert();
 	baseExpectations(convert);
 	it('should return text inside and outside of tags', function() {
 		convert.setInput('Test<div>Test</div>Test');
@@ -63,8 +62,7 @@ describe('convert', function() {
 });
 
 describe('format', function() {
-	var format;
-	format = new H2BFormat();
+	let format = new H2BFormat();
 	baseExpectations(format);
 	it('should return text inside and outside of tags', function() {
 		format.setInput('Test<div>Test</div>Test');
