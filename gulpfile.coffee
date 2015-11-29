@@ -83,7 +83,7 @@ gulp.task 'git', shell.task ['git add -A',"git ci -m 'Deployment #{date}'",
 
 #Tests
 gulp.task 'tests', ->
-	gulp.src 'test/spec/*.coffee'
+	gulp.src 'test/spec/*.js'
 		.pipe jasmine( verbose: true)
 
 #Watch files
@@ -93,7 +93,7 @@ gulp.task 'watch', ['styles','scripts','images','browser-sync'], ->
 	gulp.watch 'app/js/src/**/*.js',['scripts']
 	gulp.watch 'app/images/*',['images']
 	gulp.watch 'app/js/src/**/*.coffee',['scripts','tests']
-	gulp.watch 'test/spec/**/*.coffee', ['tests']
+	gulp.watch 'test/spec/**/*.js', ['tests']
 
 gulp.task 'build',['copy','tests']
 
