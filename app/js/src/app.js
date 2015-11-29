@@ -1,9 +1,7 @@
 'use strict';
 
-// var $ = require('jquery');
 var H2BConvert= require('./h2bconvert');
 var H2BFormat= require('./h2bformat');
-
 
 var input = document.getElementById('input');
 var output = document.getElementById('output');
