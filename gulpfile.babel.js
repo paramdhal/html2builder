@@ -1,6 +1,6 @@
 //jslint node: true
 
-var gulp = require('gulp');
+import gulp from 'gulp';
 var plugins = require('gulp-load-plugins')({
 	pattern: '*',
 	rename: {
@@ -9,32 +9,35 @@ var plugins = require('gulp-load-plugins')({
 	}
 });
 
-var srcDir = "app/";
-var buildDir = srcDir+"build/";
-var distDir = "dist/";
-var testDir = "test/";
-var task = plugins.util.env._[0];
-var watch = typeof task === "undefined";
+const dirs = {
+	src: "app",
+	build: "app/build",
+	dist: "dist",
+	test: "test"
+}
 
-gulp.task('styles', function() {
+const task = plugins.util.env._[0];
+const watch = typeof task === "undefined";
 
-	return gulp.src(srcDir + 'scss/**/*.scss')
+gulp.task('styles', () => {
+
+	return gulp.src(`${dirs.src}/scss/**/*.scss`)
 		.pipe(plugins.sass({
 			outputStyle: !watch ? 'compressed' : 'expanded',
 			includePaths: [plugins.bourbon.includePaths],
 			errLogToConsole: false
 		}).on('error', reportError))
-		.pipe(gulp.dest(buildDir+'/css/'))
+		.pipe(gulp.dest(`${dirs.build}/css/`))
 		.pipe(plugins.browserSync.reload({
 			stream: true
 		}));
 })
 
-gulp.task('scripts', function() {
-	var b;
+gulp.task('scripts', () => {
+	let b;
 	
-	var config = {
-		entries: srcDir +'js/src/app.js'
+	let config = {
+		entries: `${dirs.src}/js/src/app.js`
 	}
 	if(watch){
 		config.debug = true;
@@ -53,7 +56,7 @@ gulp.task('scripts', function() {
 		b.bundle().on('error',reportError)
 			.pipe(plugins.source('app.js'))
 			.pipe(!watch ? plugins.streamify(plugins.uglify()) : plugins.util.noop())
-			.pipe(gulp.dest(buildDir + 'js'))
+			.pipe(gulp.dest(`${dirs.build}/js`))
 			.pipe(plugins.browserSync.reload({
 				stream: true
 			}));
@@ -62,9 +65,7 @@ gulp.task('scripts', function() {
 	return rebundle();
 });
 
-function reportError() {
-	var errors,slice = [].slice;
-	errors = 1 <= arguments.length ? slice.call(arguments, 0) : [];
+function reportError(...errors) {
 	console.log(errors);
 	plugins.notify.onError({
 		title: "Compile Error",
@@ -73,39 +74,39 @@ function reportError() {
 	return this.emit('end');
 };
 
-gulp.task('browser-sync', function() {
+gulp.task('browser-sync', () => {
 	return plugins.browserSync.init(null, {
 		server: {
-			baseDir: srcDir
+			baseDir: dirs.src
 		}
 	});
 });
 
-gulp.task('bs-reload', function() {
+gulp.task('bs-reload', () => {
 	return plugins.browserSync.reload();
 });
 
 
-gulp.task('images', function() {
-	return gulp.src(srcDir + 'images/*')
-		.pipe(gulp.dest(buildDir + 'images/'))
+gulp.task('images', () => {
+	return gulp.src(`${dirs.src}/images/*`)
+		.pipe(gulp.dest(`${dirs.build}/images/`))
 		.pipe(plugins.browserSync.reload({
 			stream: true
 		}));
 });
 
 
-gulp.task('copy', ['clean'], function() {
-	gulp.src(srcDir+'index.html')
-		.pipe(gulp.dest(distDir));
+gulp.task('copy', ['clean'], () => {
+	gulp.src(`${dirs.src}/index.html`)
+		.pipe(gulp.dest(dirs.dist));
 	
-	gulp.src(buildDir + '**/*', {
-		base: srcDir
-	}).pipe(gulp.dest(distDir));
+	gulp.src(`${dirs.build}/**/*`, {
+		base: dirs.src
+	}).pipe(gulp.dest(dirs.dist));
 });
 
-gulp.task('clean', ['styles', 'scripts', 'images'], function() {
-	return gulp.src(distDir, {
+gulp.task('clean', ['styles', 'scripts', 'images'], () => {
+	return gulp.src(dirs.dist, {
 		read: false
 	}).pipe(plugins.clean());
 });
@@ -114,22 +115,22 @@ var date = new Date;
 
 gulp.task('git', plugins.shell.task(['git add -A', "git ci -m 'Deployment " + date + "'", "git push origin :gh-pages --force", "git subtree push --prefix dist origin gh-pages"]));
 
-gulp.task('tests', function() {
-	return gulp.src(testDir + 'spec/*.js')
+gulp.task('tests', () => {
+	return gulp.src(`${dirs.test}/spec/*.js`)
 		.pipe(plugins.jasmine({
 			verbose: true
 		}));
 });
 
-gulp.task('default', ['styles', 'scripts','images','browser-sync'], function() {
-	gulp.watch(srcDir + '*.html', ['bs-reload']);
-	gulp.watch(srcDir + 'scss/**/*.scss', ['styles']);
-	gulp.watch(srcDir + 'images/*', ['images']);
-	gulp.watch(testDir + 'spec/**/*.js', ['tests']);
+gulp.task('default', ['styles', 'scripts','images','browser-sync'], () => {
+	gulp.watch(`${dirs.src}/*.html`, ['bs-reload']);
+	gulp.watch(`${dirs.src}/scss/**/*.scss`, ['styles']);
+	gulp.watch(`${dirs.src}/images/*`, ['images']);
+	gulp.watch(`${dirs.test}/spec/**/*.js`, ['tests']);
 });
 
 gulp.task('build', ['copy', 'tests']);
 
-gulp.task('deploy', ['build', 'copy'],function(){
+gulp.task('deploy', ['build', 'copy'],() =>{
 	gulp.start('git');
 });
