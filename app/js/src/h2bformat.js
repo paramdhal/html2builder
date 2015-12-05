@@ -25,7 +25,7 @@ H2BFormat = (function(superClass) {
 
 	H2BFormat.prototype.tag = function(item) {
 		var attribs, children, comma, extra, name, newline, tabs;
-		name = H2BConvert.capitalize(item.name);
+		name = this.capitalize(item.name);
 		extra = '';
 		attribs = item.attribs;
 		if (attribs.hasOwnProperty("xmlns") && attribs.xmlns === "http://www.w3.org/1999/xhtml") {

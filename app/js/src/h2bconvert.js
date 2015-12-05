@@ -23,31 +23,34 @@ class H2BConvert{
 	}
 	parse(error,dom){
 		if (error) {
-			return console.log(error);
+			this.output = error;
 		} else {
-			return this.iterate(dom);
+			this.output = this.iterate(dom);
 		}
 	}
 	iterate(dom){
-		return dom.forEach(this.iterator.bind(this));
+		return dom.reduce(this.iterator.bind(this),"");
 	}
-	iterator(val){
+	iterator(prev,val){
 		switch (val.type) {
 			case "tag":
-				return this.tag(val);
+				return prev + this.tag(val);
 			case "script":
-				return this.tag(val);
+				return prev + this.tag(val);
 			case "text":
-				return this.text(val);
+				return prev + this.text(val);
 			case "comment":
-				return this.comment(val);
+				return prev + this.comment(val);
+			default:
+				return prev;
 		}
 	}
 	tag(item){
 
-		var name = H2BConvert.capitalize(item.name);
-		var extra = '';
-		var attribs = item.attribs;
+		let name = this.capitalize(item.name);
+		let output = "";
+		let extra = '';
+		let attribs = item.attribs;
 		if (attribs.hasOwnProperty("xmlns") && attribs.xmlns === "http://www.w3.org/1999/xhtml") {
 			delete attribs.xmlns;
 			name = "Document";
@@ -56,38 +59,33 @@ class H2BConvert{
 		attribs = this.attribs(attribs);
 		attribs = attribs.join('');
 		let comma = this.selfclosing.indexOf(item.name) === -1 ? ',' : '';
-		this.output += `@w${name}(${extra}${attribs}${comma}`;
-		this.children(item.children);
-		return this.output += ")";
+		output += `@w${name}(${extra}${attribs}${comma}`;
+		output += this.children(item.children);
+		return output += ")";
 	}
 	attribs(attr) {
-		
 		var results = [];
 		for (let prop in attr) {
-			let value = attr[prop];
-			let val = this.cleanText(value);
+			let val = this.cleanText(attr[prop]);
 			results.push(`@wa(${prop},${val})`);
 		}
 		return results;
 	}
 	children(children) {
-		if (children.length) {
-			return this.iterate(children);
-		}
+		return children.length ? this.iterate(children) : "";
 	}
 	text(item) {
-		let str = this.cleanText(item.data);
-		return this.output += str;
+		return this.cleanText(item.data);
 	}
 	comment(item) {
 		let str = this.cleanText(item.data);
-		return this.output += `@wcomment(${str})`;
+		return `@wcomment(${str})`;
 	}
 	cleanText(string) {
 		let clean = string.replace(/@/g, "{|@|}");
 		return clean.replace(/,/g, "{,}");
 	}
-	static capitalize(string) {
+	capitalize(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	}
 }
