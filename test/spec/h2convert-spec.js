@@ -1,6 +1,7 @@
 import H2BConvert from '../../app/js/src/h2bconvert';
 import H2BFormat from '../../app/js/src/h2bformat';
 
+
 var baseExpectations = function(instance) {
 	it('should take an input', function() {
 		instance.setInput('some input');
@@ -28,15 +29,10 @@ var baseExpectations = function(instance) {
 		instance.setInput('here,,here');
 		return expect(instance.getOutput()).toBe('here{,}{,}here');
 	});
-	it('should protect @ inside of text and comments', function() {
-		instance.setInput('<!--@here@-->');
-		expect(instance.getOutput()).toBe('@wcomment({|@|}here{|@|})');
-		instance.setInput('@here@');
-		return expect(instance.getOutput()).toBe('{|@|}here{|@|}');
-	});
-	it('should protect @ and commas inside attribute values', function() {
+	
+	it('should protect commas inside attribute values', function() {
 		instance.setInput('<div data-value="@test,ss,"></div>');
-		return expect(instance.getOutput()).toBe('@wDiv(@wa(data-value,{|@|}test{,}ss{,}),)');
+		return expect(instance.getOutput()).toBe('@wDiv(@wa(data-value,@test{,}ss{,}),)');
 	});
 	it('should deal with self closing tags', function() {
 		instance.setInput('<meta content="test" />');
@@ -55,9 +51,15 @@ describe('convert', function() {;
 		convert.setInput('Test<div>Test</div>Test');
 		return expect(convert.getOutput()).toBe('Test@wDiv(,Test)Test');
 	});
-	return it('should preserve whitespace', function() {
+	it('should preserve whitespace', function() {
 		convert.setInput('<div>\t\t</div>\n\n<div></div>\n');
 		return expect(convert.getOutput()).toBe('@wDiv(,\t\t)\n\n@wDiv(,)\n');
+	});
+
+	it('should be able to return advaned syntax', function() {
+		convert.setType("advanced");
+		convert.setInput('<div data-value="@test,ss,"></div>');
+		return expect(convert.getOutput()).toBe('⌽wDiv(⌽wa(data-value,@test⎡,⎤ss⎡,⎤),)');
 	});
 });
 
@@ -86,8 +88,13 @@ describe('format', function() {
 		format.setInput('<div>test<span></span>test</div>');
 		return expect(format.getOutput()).toBe('@wDiv(,\n\ttest\n\t@wSpan(,)\n\ttest\n)');
 	});
-	return it('should deal with self closing tags which are not self closing', function() {
+	it('should deal with self closing tags which are not self closing', function() {
 		format.setInput('<div><span/><div></div></div>');
 		return expect(format.getOutput()).toBe('@wDiv(,\n\t@wSpan(,)\n\t@wDiv(,)\n)');
+	});
+	it('should be able to return advaned syntax', function() {
+		format.setType("advanced");
+		format.setInput('<div data-value="@test,ss,"></div>');
+		return expect(format.getOutput()).toBe('⌽wDiv(⌽wa(data-value,@test⎡,⎤ss⎡,⎤),)');
 	});
 });

@@ -22,8 +22,8 @@ class H2BFormat extends H2BConvert{
 		let newline = children ? '\n' : '';
 
 		if (children) {this.increaseTab();}
-
-		output += `${tabs}@w${name}(${extra}${attribs}${comma}${newline}`;
+		let macro = this.getSymbol('macro');
+		output += `${tabs}${macro}w${name}(${extra}${attribs}${comma}${newline}`;
 		output += this.children(item.children);
 		if (!children) {tabs = "";}
 		output += `${tabs})\n`;
@@ -51,7 +51,8 @@ class H2BFormat extends H2BConvert{
 	comment(item){
 		var comment = this.cleanText(item.data);
 		let tabs = this.getTabs();
-		return `${tabs}@wcomment(${comment})\n`;
+		let macro = this.getSymbol('macro');
+		return `${tabs}${macro}wcomment(${comment})\n`;
 	}
 
 	getTabs() {

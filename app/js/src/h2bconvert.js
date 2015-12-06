@@ -1,8 +1,22 @@
 import htmlparser from 'htmlparser2';
 
+const types = {
+	builder:{
+		macro: "@",
+		braceleft: "{",
+		braceright: "}"
+	},
+	advanced:{
+		macro: "⌽",
+		braceleft: "⎡",
+		braceright: "⎤"
+	}
+}
 
 class H2BConvert{
-	constructor(){
+
+	constructor(type="builder"){
+		this.setType("builder");
 		this.input = '';
 		this.handler = new htmlparser.DomHandler(this.parse.bind(this));
 		this.parser = new htmlparser.Parser(this.handler, {
@@ -10,6 +24,9 @@ class H2BConvert{
 		});
 		this.output = '';
 		this.selfclosing = ["area", "base", "br", "col", "embed", "hr", "img", "input", "keygen", "link", "meta", "param", "source", "wbr"];
+	}
+	setType(type="builder"){
+		this.type = types.hasOwnProperty(type) ? type: "builder";
 	}
 	setInput(input){
 		this.input = input;
@@ -50,7 +67,8 @@ class H2BConvert{
 		let {attribs,name,extra} = this.xmlns(item,this.capitalize(item.name));
 		attribs = this.attribs(attribs).join('');
 		let comma = this.selfclosing.indexOf(item.name) === -1 ? ',' : '';
-		output += `@w${name}(${extra}${attribs}${comma}`;
+		let macro = this.getSymbol('macro');
+		output += `${macro}w${name}(${extra}${attribs}${comma}`;
 		output += this.children(item.children);
 		return output += ")";
 	}
@@ -68,9 +86,10 @@ class H2BConvert{
 
 	attribs(attr) {
 		var results = [];
+		let macro = this.getSymbol('macro');
 		for (let prop in attr) {
 			let val = this.cleanText(attr[prop]);
-			results.push(`@wa(${prop},${val})`);
+			results.push(`${macro}wa(${prop},${val})`);
 		}
 		return results;
 	}
@@ -82,14 +101,19 @@ class H2BConvert{
 	}
 	comment(item) {
 		let str = this.cleanText(item.data);
-		return `@wcomment(${str})`;
+		let macro = this.getSymbol('macro');
+		return `${macro}wcomment(${str})`;
 	}
 	cleanText(string) {
-		let clean = string.replace(/@/g, "{|@|}");
-		return clean.replace(/,/g, "{,}");
+		let braceleft = this.getSymbol('braceleft');
+		let braceright = this.getSymbol('braceright');
+		return string.replace(/,/g,`${braceleft},${braceright}`);
 	}
 	capitalize(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+	getSymbol(symbol){
+		return types[this.type][symbol];
 	}
 }
 
