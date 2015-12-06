@@ -1,0 +1,16 @@
+$module: 	'form';
+
+.#{$module} {
+	&__inline > li{
+		display: inline-block;
+	}
+	&__textarea{
+		width: 100%;
+		margin-top: 20px;
+		flex: 2;
+		margin-bottom: 20px;
+		font-size: 13px;
+		font-family: $baseFontFamily;
+	}
+}
+

@@ -1,0 +1,11 @@
+$module: 	'btn';
+
+%#{$module} {
+	font-family: $baseFontFamily;
+}
+
+
+.#{$module}--primary{
+	@extend %btn;
+}
+

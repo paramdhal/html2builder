@@ -1,46 +1,8 @@
 @import 'bourbon';
 @import 'utils/reset';
+@import 'variables';
+@import 'layout';
+@import 'forms';
+@import 'buttons';
 
-$baseFontFamily: "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
-
-*{
-	box-sizing: border-box;
-}
-
-html,body{
-	height: 100%;
-	font-family: $baseFontFamily;
-}
-
-.container{
-	padding: 30px 5%;
-	display: flex;
-	flex-direction: column;
-	height: 100%;
-}
-
-button{
-	font-family: $baseFontFamily;
-}
-
-textarea{
-	width: 100%;
-	margin-top: 20px;
-	flex: 2;
-	margin-bottom: 20px;
-	font-size: 13px;
-	font-family: $baseFontFamily;
-}
-
-h1{
-	font-size: 18px;
-	display: inline-block;
-	vertical-align: middle;
-}
-
-.github{
-	display: inline-block;
-	vertical-align: middle;
-	margin-left: 10px;
-}
 
