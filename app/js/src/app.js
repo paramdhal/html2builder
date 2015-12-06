@@ -1,26 +1,33 @@
 'use strict';
 
-var H2BConvert= require('./h2bconvert');
-var H2BFormat= require('./h2bformat');
+import H2BConvert from './h2bconvert';
+import H2BFormat from './h2bformat';
+import $ from 'jQuery';
 
-var input = document.getElementById('input');
-var output = document.getElementById('output');
-var convert = document.getElementById('convert');
-var format = document.getElementById('format');
 
-var h2bconvert = new H2BConvert();
-var h2bformat= new H2BFormat();
-convert.addEventListener('click',convertHTML);
-format.addEventListener('click',formatHTML);
-input.value = document.documentElement.outerHTML;
+const $input = $('#input');
+const $output = $('#output');
+const $convert = $('#convert');
+const $format = $('#format');
+const h2bconvert = new H2BConvert();
+const h2bformat= new H2BFormat();
+
+$convert.on('click',convertHTML);
+$format.on('click',formatHTML);
+$input.val(document.documentElement.outerHTML);
+
 formatHTML();
 
 function convertHTML(){
-	h2bconvert.setInput(input.value);
-	output.value = h2bconvert.getOutput();
+	convert(h2bconvert);
 }
 
 function formatHTML(){
-	h2bformat.setInput(input.value);
-	output.value = h2bformat.getOutput();
+	convert(h2bformat);
+}
+
+function convert(instance){
+	instance.setType($('[name="type"]:checked').val());
+	instance.setInput($input.val());
+	$output.val(instance.getOutput());
 }

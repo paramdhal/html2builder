@@ -9,6 +9,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "htmlparser2": "^3.7.2",
+    "jquery": "^2.1.4",
     "string.prototype.repeat": "^0.2.0"
   },
   "devDependencies": {
