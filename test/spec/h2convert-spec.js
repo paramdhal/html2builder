@@ -1,7 +1,6 @@
 import H2BConvert from '../../app/js/src/h2bconvert';
 import H2BFormat from '../../app/js/src/h2bformat';
 
-
 var baseExpectations = function(instance) {
 	it('should take an input', function() {
 		instance.setInput('some input');

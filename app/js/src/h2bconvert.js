@@ -1,5 +1,5 @@
 import htmlparser from 'htmlparser2';
-import 'string.prototype.repeat';
+
 
 class H2BConvert{
 	constructor(){
@@ -46,23 +46,26 @@ class H2BConvert{
 		}
 	}
 	tag(item){
-
-		let name = this.capitalize(item.name);
 		let output = "";
-		let extra = '';
+		let {attribs,name,extra} = this.xmlns(item,this.capitalize(item.name));
+		attribs = this.attribs(attribs).join('');
+		let comma = this.selfclosing.indexOf(item.name) === -1 ? ',' : '';
+		output += `@w${name}(${extra}${attribs}${comma}`;
+		output += this.children(item.children);
+		return output += ")";
+	}
+
+	xmlns(item,name){
+		let extra = "";
 		let attribs = item.attribs;
 		if (attribs.hasOwnProperty("xmlns") && attribs.xmlns === "http://www.w3.org/1999/xhtml") {
 			delete attribs.xmlns;
 			name = "Document";
 			extra = item.name + ",";
 		}
-		attribs = this.attribs(attribs);
-		attribs = attribs.join('');
-		let comma = this.selfclosing.indexOf(item.name) === -1 ? ',' : '';
-		output += `@w${name}(${extra}${attribs}${comma}`;
-		output += this.children(item.children);
-		return output += ")";
+		return { attribs, name, extra};
 	}
+
 	attribs(attr) {
 		var results = [];
 		for (let prop in attr) {
