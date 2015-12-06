@@ -16,13 +16,30 @@
 				<a href="https://github.com/paramdhal/html2builder" target="_blank" class="github"><img src="build/images/GitHub-Mark.png" height="32" width="32" alt="Octocat"></a>
 			</header>
 			
-			<textarea id="input" ></textarea>	
-			<div class="buttons">
-				<button id="convert">Convert</button>
-				<button id="format">Convert and Format</button>
-			</div>
+			<textarea class="form__textarea" id="input" ></textarea>
 			
-			<textarea id="output" cols="30" rows="10"></textarea>
+			<ul class="form__inline">
+				<li>
+					<label class="form__control">
+						<span class="form__label">Builder</span>
+						<input type="radio" name="type" value="builder" checked=checked>
+					</label>
+				</li>
+				<li>
+					<label class="form__control">
+						<span class="form__label">Advanced</span>
+						<input class="form__input" type="radio" name="type" value="advanced">
+					</label>
+				</li>
+				<li>
+					<button class="btn--primary" id="convert">Convert</button>
+				</li>
+				<li>
+					<button class="btn--primary" id="format">Convert and Format</button>
+				</li>
+			</ul>
+
+			<textarea class="form__textarea" id="output" cols="30" rows="10"></textarea>
 		</div>
 		
 
