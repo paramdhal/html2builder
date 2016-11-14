@@ -1,19 +1,19 @@
 import H2BConvert from './h2bconvert';
 import 'string.prototype.repeat';
 
-class H2BFormat extends H2BConvert{
-	getOutput(){
+class H2BFormat extends H2BConvert {
+	getOutput() {
 		super.getOutput();
 		return this.output.trim();
 	}
-	setInput(input){
+	setInput(input) {
 		this.tabs = 0;
 		super.setInput(input);
 	}
 
-	tag(item){
+	tag(item) {
 		let output = "";
-		let {attribs,name,extra} = this.xmlns(item,this.capitalize(item.name));
+		let { attribs, name, extra } = this.xmlns(item, this.capitalize(item.name));
 		attribs = this.attribs(attribs).join('');
 
 		let comma = this.selfclosing.indexOf(item.name) === -1 ? ',' : '';
@@ -21,11 +21,12 @@ class H2BFormat extends H2BConvert{
 		let children = this.checkForTag(item.children);
 		let newline = children ? '\n' : '';
 
-		if (children) {this.increaseTab();}
+		if (children) { this.increaseTab(); }
 		let macro = this.getSymbol('macro');
-		output += `${tabs}${macro}w${name}(${extra}${attribs}${comma}${newline}`;
+		const prefix = this.getPrefix(item.name);
+		output += `${tabs}${macro}${prefix}${name}(${extra}${attribs}${comma}${newline}`;
 		output += this.children(item.children);
-		if (!children) {tabs = "";}
+		if (!children) { tabs = ""; }
 		output += `${tabs})\n`;
 		children && this.decreaseTab();
 		return output;
@@ -48,7 +49,7 @@ class H2BFormat extends H2BConvert{
 		return text;
 	}
 
-	comment(item){
+	comment(item) {
 		var comment = this.cleanText(item.data);
 		let tabs = this.getTabs();
 		let macro = this.getSymbol('macro');
@@ -58,22 +59,22 @@ class H2BFormat extends H2BConvert{
 	getTabs() {
 		return '\t'.repeat(this.tabs);
 	}
-	checkForTag(children){
+	checkForTag(children) {
 		return children.some(function(el) {
 			return el.type === 'tag' || el.type === 'comment';
 		});
 	}
-	increaseTab(){
+	increaseTab() {
 		return this.tabs++;
 	}
-	decreaseTab(){
+	decreaseTab() {
 		return this.tabs--;
 	}
 
-	cleanText(string){
+	cleanText(string) {
 		let clean = super.cleanText(string);
 		clean = clean.replace(/\n|\t|^(\s)+$/g, "");
- 		return clean.replace(/^(\s)+$/g, "");
+		return clean.replace(/^(\s)+$/g, "");
 	}
 }
 

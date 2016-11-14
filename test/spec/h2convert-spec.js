@@ -1,7 +1,6 @@
 import H2BConvert from '../../app/js/src/h2bconvert';
 import H2BFormat from '../../app/js/src/h2bformat';
 
-
 var baseExpectations = function(instance) {
 	it('should take an input', function() {
 		instance.setInput('some input');
@@ -15,6 +14,11 @@ var baseExpectations = function(instance) {
 		instance.setInput('<div></div>');
 		return expect(instance.getOutput()).toBe('@wDiv(,)');
 	});
+	it('should return macro code for svg', function() {
+		instance.setInput('<g></g>');
+		return expect(instance.getOutput()).toBe('@vG(,)');
+	});
+
 	it('should return macro code for atrributes', function() {
 		instance.setInput('<div class="test" id="test" data-test="test"></div>');
 		return expect(instance.getOutput()).toBe('@wDiv(@wa(class,test)@wa(id,test)@wa(data-test,test),)');
@@ -29,7 +33,7 @@ var baseExpectations = function(instance) {
 		instance.setInput('here,,here');
 		return expect(instance.getOutput()).toBe('here{,}{,}here');
 	});
-	
+
 	it('should protect commas inside attribute values', function() {
 		instance.setInput('<div data-value="@test,ss,"></div>');
 		return expect(instance.getOutput()).toBe('@wDiv(@wa(data-value,@test{,}ss{,}),)');

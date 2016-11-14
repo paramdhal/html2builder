@@ -1,21 +1,22 @@
 import htmlparser from 'htmlparser2';
+import { isSVG } from './svg';
 
 const types = {
-	builder:{
+	builder: {
 		macro: "@",
 		braceleft: "{",
 		braceright: "}"
 	},
-	advanced:{
+	advanced: {
 		macro: "⌽",
 		braceleft: "⎡",
 		braceright: "⎤"
 	}
 }
 
-class H2BConvert{
+class H2BConvert {
 
-	constructor(type="builder"){
+	constructor(type = "builder") {
 		this.setType("builder");
 		this.input = '';
 		this.handler = new htmlparser.DomHandler(this.parse.bind(this));
@@ -25,30 +26,30 @@ class H2BConvert{
 		this.output = '';
 		this.selfclosing = ["area", "base", "br", "col", "embed", "hr", "img", "input", "keygen", "link", "meta", "param", "source", "wbr"];
 	}
-	setType(type="builder"){
-		this.type = types.hasOwnProperty(type) ? type: "builder";
+	setType(type = "builder") {
+		this.type = types.hasOwnProperty(type) ? type : "builder";
 	}
-	setInput(input){
+	setInput(input) {
 		this.input = input;
 		this.output = '';
 	}
-	getOutput(){
+	getOutput() {
 		this.parser.reset();
 		this.parser.write(this.input);
 		this.parser.done();
 		return this.output;
 	}
-	parse(error,dom){
+	parse(error, dom) {
 		if (error) {
 			this.output = error;
 		} else {
 			this.output = this.iterate(dom);
 		}
 	}
-	iterate(dom){
-		return dom.reduce(this.iterator.bind(this),"");
+	iterate(dom) {
+		return dom.reduce(this.iterator.bind(this), "");
 	}
-	iterator(prev,val){
+	iterator(prev, val) {
 		switch (val.type) {
 			case "tag":
 				return prev + this.tag(val);
@@ -62,18 +63,19 @@ class H2BConvert{
 				return prev;
 		}
 	}
-	tag(item){
+	tag(item) {
 		let output = "";
-		let {attribs,name,extra} = this.xmlns(item,this.capitalize(item.name));
+		let { attribs, name, extra } = this.xmlns(item, this.capitalize(item.name));
 		attribs = this.attribs(attribs).join('');
 		let comma = this.selfclosing.indexOf(item.name) === -1 ? ',' : '';
 		let macro = this.getSymbol('macro');
-		output += `${macro}w${name}(${extra}${attribs}${comma}`;
+		const prefix = this.getPrefix(item.name);
+		output += `${macro}${prefix}${name}(${extra}${attribs}${comma}`;
 		output += this.children(item.children);
 		return output += ")";
 	}
 
-	xmlns(item,name){
+	xmlns(item, name) {
 		let extra = "";
 		let attribs = item.attribs;
 		if (attribs.hasOwnProperty("xmlns") && attribs.xmlns === "http://www.w3.org/1999/xhtml") {
@@ -81,7 +83,7 @@ class H2BConvert{
 			name = "Document";
 			extra = item.name + ",";
 		}
-		return { attribs, name, extra};
+		return { attribs, name, extra };
 	}
 
 	attribs(attr) {
@@ -107,15 +109,17 @@ class H2BConvert{
 	cleanText(string) {
 		let braceleft = this.getSymbol('braceleft');
 		let braceright = this.getSymbol('braceright');
-		return string.replace(/,/g,`${braceleft},${braceright}`);
+		return string.replace(/,/g, `${braceleft},${braceright}`);
 	}
 	capitalize(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	}
-	getSymbol(symbol){
+	getSymbol(symbol) {
 		return types[this.type][symbol];
 	}
+	getPrefix(name) {
+		return isSVG(name) ? "v" : "w";
+	}
 }
-
 
 module.exports = H2BConvert;
