@@ -12,7 +12,7 @@ var plugins = require('gulp-load-plugins')({
 const dirs = {
 	src: "app",
 	build: "app/build",
-	dist: "dist",
+	dist: "docs",
 	test: "test"
 }
 
