@@ -14,6 +14,8 @@ const types = {
 	}
 }
 
+const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
 class H2BConvert {
 
 	constructor(type = "builder") {
@@ -65,26 +67,18 @@ class H2BConvert {
 	}
 	tag(item) {
 		let output = "";
-		let { attribs, name, extra } = this.xmlns(item, this.capitalize(item.name));
-		attribs = this.attribs(attribs).join('');
+
+        const {macroName,attributes} = this.getMacro(item);
+
+		const attribs = this.attribs(attributes).join('');
 		let comma = this.selfclosing.indexOf(item.name) === -1 ? ',' : '';
-		let macro = this.getSymbol('macro');
-		const prefix = this.getPrefix(item.name);
-		output += `${macro}${prefix}${name}(${extra}${attribs}${comma}`;
+		let macroSymbol = this.getSymbol('macro');
+
+		output += `${macroSymbol}${macroName}${attribs}${comma}`;
 		output += this.children(item.children);
 		return output += ")";
 	}
 
-	xmlns(item, name) {
-		let extra = "";
-		let attribs = item.attribs;
-		if (attribs.hasOwnProperty("xmlns") && attribs.xmlns === "http://www.w3.org/1999/xhtml") {
-			delete attribs.xmlns;
-			name = "Document";
-			extra = item.name + ",";
-		}
-		return { attribs, name, extra };
-	}
 
 	attribs(attr) {
 		var results = [];
@@ -116,15 +110,36 @@ class H2BConvert {
 
 		return braceLeft + string + braceRight;
 	}
-	capitalize(string) {
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
+
 	getSymbol(symbol) {
 		return types[this.type][symbol];
 	}
-	getPrefix(name) {
-		return isSVG(name) ? "v" : "w";
+    getMacro(item) {
+
+
+        return {macroName:this._getMacroName(item),attributes:item.attribs}
 	}
+
+    _getMacroName(item){
+
+        const {name,attribs} = item;
+
+        if(attribs.hasOwnProperty("xmlns") && attribs.xmlns === "http://www.w3.org/1999/xhtml"){
+
+            delete attribs.xmlns;
+
+            return `wDocument(${name},`;
+        }else if(name.includes('-')){
+            return `wtag(${name},`;
+        }else{
+            const prefix =  isSVG(name) ? "v" : "w";
+            const capitalized = capitalize(name);
+            return  `${prefix}${capitalized}(`;
+        }
+    }
+
+
+
 }
 
 module.exports = H2BConvert;

@@ -1,7 +1,7 @@
 const H2BConvert = require('../app/js/h2bconvert.js');
 const H2BFormat = require('../app/js/h2bformat.js');
 
-var baseExpectations = function(instance) {
+const baseExpectations = function(instance) {
 
     beforeEach(()=>{
         instance.setType("builder");
@@ -11,7 +11,7 @@ var baseExpectations = function(instance) {
 		instance.setInput('some input');
 		return expect(instance.input).toBe('some input');
 	});
-	it('should return an ouput', function() {
+	it('should return an output', function() {
 		instance.setInput('some input');
 		return expect(instance.getOutput()).toBe('some input');
 	});
@@ -23,6 +23,11 @@ var baseExpectations = function(instance) {
 		instance.setInput('<g></g>');
 		return expect(instance.getOutput()).toBe('@vG(,)');
 	});
+
+    it('should return wtag for custom elements', function() {
+        instance.setInput('<v-foo :foo="bar">Content</v-foo>');
+        return expect(instance.getOutput()).toBe('@wtag(v-foo,@wa(:foo,bar),Content)');
+    });
 
 	it('should return macro code for atrributes', function() {
 		instance.setInput('<div class="test" id="test" data-test="test"></div>');

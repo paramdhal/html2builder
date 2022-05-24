@@ -12,8 +12,8 @@ class H2BFormat extends H2BConvert {
 
 	tag(item) {
 		let output = "";
-		let { attribs, name, extra } = this.xmlns(item, this.capitalize(item.name));
-		attribs = this.attribs(attribs).join('');
+        const {macroName,attributes} = this.getMacro(item);
+		const attribs = this.attribs(attributes).join('');
 
 		let comma = this.selfclosing.indexOf(item.name) === -1 ? ',' : '';
 		let tabs = this.getTabs();
@@ -22,8 +22,7 @@ class H2BFormat extends H2BConvert {
 
 		if (children) { this.increaseTab(); }
 		let macro = this.getSymbol('macro');
-		const prefix = this.getPrefix(item.name);
-		output += `${tabs}${macro}${prefix}${name}(${extra}${attribs}${comma}${newline}`;
+		output += `${tabs}${macro}${macroName}${attribs}${comma}${newline}`;
 		output += this.children(item.children);
 		if (!children) { tabs = ""; }
 		output += `${tabs})\n`;
