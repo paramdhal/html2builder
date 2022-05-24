@@ -34,14 +34,14 @@ var baseExpectations = function(instance) {
 	});
 	it('should protect commas inside of text and comments', function() {
 		instance.setInput('<!--,here,and,here-->');
-		expect(instance.getOutput()).toBe('@wcomment({,}here{,}and{,}here)');
+		expect(instance.getOutput()).toBe('@wcomment({,here,and,here})');
 		instance.setInput('here,,here');
-		return expect(instance.getOutput()).toBe('here{,}{,}here');
+		return expect(instance.getOutput()).toBe('{here,,here}');
 	});
 
 	it('should protect commas inside attribute values', function() {
 		instance.setInput('<div data-value="@test,ss,"></div>');
-		return expect(instance.getOutput()).toBe('@wDiv(@wa(data-value,@test{,}ss{,}),)');
+		return expect(instance.getOutput()).toBe('@wDiv(@wa(data-value,{@test,ss,}),)');
 	});
 	it('should deal with self closing tags', function() {
 		instance.setInput('<meta content="test" />');
@@ -68,7 +68,7 @@ describe('convert', function() {;
 	it('should be able to return advaned syntax', function() {
 		convert.setType("advanced");
 		convert.setInput('<div data-value="@test,ss,"></div>');
-		return expect(convert.getOutput()).toBe('⌽wDiv(⌽wa(data-value,@test⎡,⎤ss⎡,⎤),)');
+		return expect(convert.getOutput()).toBe('⌽wDiv(⌽wa(data-value,⎡@test,ss,⎤),)');
 	});
 });
 
@@ -104,6 +104,6 @@ describe('format', function() {
 	it('should be able to return advaned syntax', function() {
 		format.setType("advanced");
 		format.setInput('<div data-value="@test,ss,"></div>');
-		return expect(format.getOutput()).toBe('⌽wDiv(⌽wa(data-value,@test⎡,⎤ss⎡,⎤),)');
+		return expect(format.getOutput()).toBe('⌽wDiv(⌽wa(data-value,⎡@test,ss,⎤),)');
 	});
 });

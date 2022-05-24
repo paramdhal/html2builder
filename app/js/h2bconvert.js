@@ -107,9 +107,14 @@ class H2BConvert {
 		return `${macro}wcomment(${str})`;
 	}
 	cleanText(string) {
-		let braceleft = this.getSymbol('braceleft');
-		let braceright = this.getSymbol('braceright');
-		return string.replace(/,/g, `${braceleft},${braceright}`);
+		const braceLeft = this.getSymbol('braceleft');
+		const braceRight = this.getSymbol('braceright');
+
+        if(!string.includes(',')){
+            return string;
+        }
+
+		return braceLeft + string + braceRight;
 	}
 	capitalize(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
