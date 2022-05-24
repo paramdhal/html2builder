@@ -15,7 +15,7 @@
     "license": "UNLICENSED",
     "dependencies": {
         "htmlparser2": "^8.0.1",
-        "jquery": "^2.1.4"
+        "jquery": "^3.6.0"
     },
     "devDependencies": {
         "browser-sync": "^2.27.10",
