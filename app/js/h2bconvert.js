@@ -1,5 +1,5 @@
-import htmlparser from 'htmlparser2';
-import { isSVG } from './svg';
+const {DomHandler,Parser} = require('htmlparser2');
+const { isSVG }  = require('./svg.js');
 
 const types = {
 	builder: {
@@ -19,8 +19,8 @@ class H2BConvert {
 	constructor(type = "builder") {
 		this.setType("builder");
 		this.input = '';
-		this.handler = new htmlparser.DomHandler(this.parse.bind(this));
-		this.parser = new htmlparser.Parser(this.handler, {
+		this.handler = new DomHandler(this.parse.bind(this));
+		this.parser = new Parser(this.handler, {
 			recognizeSelfClosing: true
 		});
 		this.output = '';

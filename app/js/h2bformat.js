@@ -1,5 +1,4 @@
-import H2BConvert from './h2bconvert';
-import 'string.prototype.repeat';
+const H2BConvert = require('./h2bconvert.js');
 
 class H2BFormat extends H2BConvert {
 	getOutput() {

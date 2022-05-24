@@ -77,4 +77,6 @@ const elements = new Set([
 	"vkern"
 ]);
 
-export const isSVG = (name) => elements.has(name);
+const isSVG = (name) => elements.has(name);
+
+module.exports.isSVG = isSVG;

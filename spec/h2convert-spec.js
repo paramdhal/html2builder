@@ -1,7 +1,12 @@
-import H2BConvert from '../../app/js/src/h2bconvert';
-import H2BFormat from '../../app/js/src/h2bformat';
+const H2BConvert = require('../app/js/h2bconvert.js');
+const H2BFormat = require('../app/js/h2bformat.js');
 
 var baseExpectations = function(instance) {
+
+    beforeEach(()=>{
+        instance.setType("builder");
+    })
+
 	it('should take an input', function() {
 		instance.setInput('some input');
 		return expect(instance.input).toBe('some input');

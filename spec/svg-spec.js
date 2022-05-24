@@ -1,6 +1,6 @@
-import { isSVG } from '../../app/js/src/svg';
+const { isSVG }  = require('../app/js/svg.js');
 
-describe('isSVG', function() {;
+describe('isSVG', function() {
 	it('should return true for svg elements', function() {
 		var validElements = ['path', 'g', 'fePointLight', 'feDisplacementMap'];
 		validElements.forEach((element) => expect(isSVG(element)).toBe(true));

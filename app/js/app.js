@@ -1,8 +1,6 @@
-'use strict';
-
-import H2BConvert from './h2bconvert';
-import H2BFormat from './h2bformat';
-import $ from 'jQuery';
+const H2BConvert  = require('./h2bconvert');
+const H2BFormat = require('./h2bformat');
+const $ = require('jQuery');
 
 
 const $input = $('#input');

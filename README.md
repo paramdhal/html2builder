@@ -6,14 +6,16 @@ Project link http://paramdhal.github.io/html2builder/
 
 ##Development
 
-```bash
-npm install && bower install
-```
-
 To open up a local server and watch files
 
 ```bash
-gulp watch
+npm run watch
+```
+
+## Other commands
+```bash
+npm run test
+npm run prod
 ```
 
 
